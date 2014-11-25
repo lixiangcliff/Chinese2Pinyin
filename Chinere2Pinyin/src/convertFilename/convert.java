@@ -16,7 +16,7 @@ public class convert {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         //给定文件所在目录
-        String path = "e:\\mp3"; 
+        String path = "e:\\kaijuan8fenzhong"; 
         processAllFiles(path);
 	}
 	
@@ -42,7 +42,7 @@ public class convert {
 	} 
 	
 	//重命名文件
-	public static void renameFile(String path, String oldname, String newname) {
+	private static void renameFile(String path, String oldname, String newname) {
 		if (!oldname.equals(newname)) {// 新的文件名和以前文件名不同时,才有必要进行重命名
 			File oldfile = new File(path + "/" + oldname);
 			File newfile = new File(path + "/" + newname);
@@ -55,7 +55,10 @@ public class convert {
 	}
 	
 	//讲给予的中文转化成拼音并返回
-	public static String convertToPinyin(String oldName) {
+	private static String convertToPinyin(String oldName) {
+		//only for 开卷八分钟.否则应该注释掉 
+		oldName = processForKaijuan(oldName);
+		//end for 开卷八分钟
 		StringBuilder newName = new StringBuilder();
 		HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
 		//outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
@@ -80,6 +83,17 @@ public class convert {
 			}
 		}
 		return newName.toString();
+	}
+	
+	//for 开卷八分钟
+	//(eg. to make "120102.[LáiDàoRénJiān].ShĭTiĕShēng.mp3" into 0102LáiDàoRénJiān.ShĭTiĕShēng.mp3) 
+	private static String processForKaijuan(String oldName) {
+		String modOldName = oldName.substring(2,6) + oldName.substring(8);
+		int rightBracket = modOldName.indexOf(']');
+		if (rightBracket > -1) {
+			modOldName = modOldName.substring(0, rightBracket) + modOldName.substring(rightBracket + 1);
+		}
+		return modOldName;
 	}
 	
 
